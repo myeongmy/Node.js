@@ -11,9 +11,13 @@ var bodyparser = require('body-parser')
 app.use(bodyparser.urlencoded({extended: false}))
 
 // express와 template engine을 연결하는 작업이다.
-app.set('view engine', 'jade')
+//app.set('view engine', 'jade')
 
 // jade 파일 저장할 디렉토리 설정
+//app.set('views', './views')
+
+// express와 template engine ejs 연결 후 디렉토리 설정
+app.set('view engine', 'ejs')
 app.set('views', './views')
 
 // express의 정적 파일 제공 기능 이용한다. (정적인 파일들을 앞으로 이 폴더에 넣어 두고 그 때 그 때 필요할 때 갖다 쓰면 된다)
@@ -93,6 +97,18 @@ app.post('/form_receiver', function(req, res){
     var description = req.body.description;
     
     res.send(title+','+description)
+})
+
+app.post('/email_post', function(req, res){
+    //res.send('<h1>Welcome!!'+req.body.email+'</h1>');
+    res.render('email', {email: req.body.email})
+})
+
+app.post('/ajax_send_email', function(req, res){
+    console.log(req.body.email);
+    var responseData = {'result': 'ok', 'email': req.body.email};
+    
+    res.json(responseData);
 })
 app.listen(3000, function(){
     console.log('Connected 3000 port!!!')
